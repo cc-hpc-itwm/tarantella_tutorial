@@ -33,11 +33,11 @@ Supported versions start at ``Tensorflow 2.4``, and they can be installed in a c
 environment using pip, as recommended on the
 `TensorFlow website <https://www.tensorflow.org/install>`_.
 
-.. note::
+.. caution::
 
   This tutorial targets installations on the STYX cluster, where some of the dependencies are pre-installed.
   For a full description of Tarantella's installation steps, refer to the 
-  `Tarantella documentation <https://tarantella.readthedocs.io/en/latest/installation.html>`_
+  `Tarantella documentation <https://tarantella.readthedocs.io/en/latest/installation.html>`_.
 
 To get started, create and activate an environment for Tarantella:
 

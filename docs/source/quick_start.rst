@@ -98,7 +98,7 @@ This will execute our model distributedly on a single node, using all the availa
     export LD_LIBRARY_PATH=${CONDA_ENV_PATH}/lib:$LD_LIBRARY_PATH
 
   Always add the following ``-x`` flags to the ``tarantella`` command in the examples bellow:
-  
+
   .. code-block:: bash
   
     tarantella -x XLA_FLAGS="--xla_gpu_cuda_data_dir=${CONDA_ENV_PATH}/lib" ...
@@ -250,4 +250,4 @@ Callbacks
 ^^^^^^^^^
 
 Tarantella callbacks are discussed in detail in the
-`<Tarantella docs https://tarantella.readthedocs.io/en/latest/quick_start.html#callbacks>`__.
+`Tarantella docs <https://tarantella.readthedocs.io/en/latest/quick_start.html#callbacks>`__.
