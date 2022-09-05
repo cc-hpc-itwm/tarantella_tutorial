@@ -31,16 +31,6 @@ exists in the top level project directory.")
 
 # -- General configuration ---------------------------------------------------
 
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = ['sphinx.ext.todo']
-try:
-  import sphinx_rtd_theme
-  extensions += ['sphinx_rtd_theme']
-except:
-  pass
-
 # Display TODOs by setting to True
 todo_include_todos = False
 
