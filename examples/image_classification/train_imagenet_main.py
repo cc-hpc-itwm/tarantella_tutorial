@@ -158,7 +158,8 @@ if __name__ == '__main__':
                      input_tensor=None,
                      pooling=None,
                      classifier_activation='softmax')
-  model = tnt.Model(model)
+  model = tnt.Model(model,
+                    parallel_strategy = tnt.ParallelStrategy.DATA)
 
   model.compile(**get_reference_compile_params(num_ranks = tnt.get_size(),
                                                num_samples = args.train_num_samples,
