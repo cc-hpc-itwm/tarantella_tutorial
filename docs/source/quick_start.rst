@@ -3,7 +3,7 @@
 Quick Start
 ===========
 
-This section explains how to get started using Tarantella to distributedly
+This section explains how to start using Tarantella to distributedly
 train an existing TensorFlow model.
 First, we will examine what changes have to be made to your code,
 before executing it on the command line with ``tarantella``.
@@ -69,7 +69,7 @@ Lastly, we can evaluate the final accuracy of our ``model`` on the ``test_datase
 ``model.evaluate``.
 
 To test and run Tarantella in the next section, you can find a full version of the above example
-`here <https://github.com/cc-hpc-itwm/tarantella_tutorial/blob/master/examples/lenet5.py>`__.
+`here <https://github.com/cc-hpc-itwm/tarantella_tutorial/blob/main/examples/lenet5.py>`__.
 
 Executing your model with ``tarantella``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -82,6 +82,26 @@ The simplest way to run the model is by passing its Python script to ``tarantell
    tarantella -- model.py
 
 This will execute our model distributedly on a single node, using all the available GPUs.
+
+
+.. caution::
+
+  On STYX, you might run into some error messages when trying to use the GPUs.
+  Follow the following steps to correctly run Tarantella:
+
+  .. code-block:: bash
+
+    export CONDA_ENV_PATH=/path/to/your/conda/environment
+
+    mkdir -p ${CONDA_ENV_PATH}/lib/nvvm/libdevice
+    mv ${CONDA_ENV_PATH}/lib/libdevice.10.bc ${CONDA_ENV_PATH}/lib/nvvm/libdevice
+    export LD_LIBRARY_PATH=${CONDA_ENV_PATH}/lib:$LD_LIBRARY_PATH
+
+  Always add the following ``-x`` flags to the ``tarantella`` command in the examples bellow:
+  
+  .. code-block:: bash
+  
+    tarantella -x XLA_FLAGS="--xla_gpu_cuda_data_dir=${CONDA_ENV_PATH}/lib" ...
 
 We can also set command line parameters for the python script ``model.py``, which have to
 succeed the name of the script:
@@ -229,104 +249,5 @@ micro-batching mechanism by setting ``tnt_distribute_validation_dataset = False`
 Callbacks
 ^^^^^^^^^
 
-Tarantella fully supports all pre-defined
-`Keras callbacks <https://www.tensorflow.org/api_docs/python/tf/keras/callbacks>`__:
-
-* ``tf.keras.callbacks.CSVLogger``
-* ``tf.keras.callbacks.EarlyStopping``
-* ``tf.keras.callbacks.History``
-* ``tf.keras.callbacks.LearningRateScheduler``
-* ``tf.keras.callbacks.ModelCheckpoint``
-* ``tf.keras.callbacks.ProgbarLogger``
-* ``tf.keras.callbacks.ReduceLROnPlateau``
-* ``tf.keras.callbacks.RemoteMonitor``
-* ``tf.keras.callbacks.TensorBoard``
-* ``tf.keras.callbacks.TerminateOnNaN``
-
-All of these callbacks are implemented in such a way that the device-local,
-micro-batch information is accumulated over all devices. This leads to the same
-callback behavior as in a serial execution (using the full batch).
-That is, users do not need to make any modifications to their code when using
-Keras callbacks with Tarantella.
-
-However, when using the `TensorBoard <https://www.tensorflow.org/tensorboard>`__ callback,
-by default, Tarantella will only collect device-local information *on one device*.
-If you want to collect the local information on all devices use the
-environment variable ``TNT_TENSORBOARD_ON_ALL_DEVICES``:
-
-.. code-block:: bash
-
-   TNT_TENSORBOARD_ON_ALL_DEVICES=true tarantella -- model.py
-
-.. note::
-
-   The explicit addition of ``BaseLogger`` callbacks is not supported in Tarantella.
-
-.. _custom-callbacks-label:
-
-Custom Callbacks
-----------------
-
-Any custom Keras callback can be used in a distributed fashion with Tarantella.
-To this end, define your own custom Keras callback as explained in the
-`Writing Custom Callbacks guide <https://www.tensorflow.org/guide/keras/custom_callback>`__.
-
-Next, all you need to do is wrap the ``keras_callback`` into a
-``tnt.keras.callbacks.Callback`` object and simply add it to the list of callbacks provided
-in the model training or inference methods:
-
-.. code-block:: python
-
-  class CustomCallback(keras.callbacks.Callback):
-    def on_train_begin(self, logs = None):
-      keys = list(logs.keys())
-      print("Starting training; got log keys: {}".format(keys))
-    ...
-
-  keras_callback = CustomCallback()
-
-  tnt_callback = tnt.keras.callbacks.Callback(keras_callback,
-                                              aggregate_logs = True,
-                                              run_on_all_ranks = True)
-  model.fit(train_dataset,
-            epochs = 2,
-            callbacks = [tnt_callback])
-
-The execution of a ``tnt.keras.callbacks.Callback`` can be configured through the following parameters:
-
-* ``run_on_all_ranks`` - defines whether the callback will be run on all devices or just
-  the master rank (defaults to ``True``). While most callbacks need to collect data from
-  all the used devices, there are cases when this behavior is not desirable (e.g., a profiling
-  callback might only need to measure timings on the master rank).
-* ``aggregate_logs`` - specifies whether the logs need to be aggregated from all devices
-  (defaults to ``True``). For instance, ``loss`` values have to be aggregated across all
-  micro-batches to provide the relevant batch-level information. Conversely, logs counting
-  the number of ``iterations`` do not require aggregation, as the iteration counter is
-  identical on all participating devices.
-
-The ``keras.callbacks.Callback`` object can also be directly passed (without the wrapper) to the
-list of callbacks provided to the ``model.fit`` function. In this case, the
-``tnt.keras.callbacks.Callback`` object is automatically created with the default parameter values.
-
-Rank-Local Callbacks
---------------------
-
-There are cases when user-defined callbacks do not require distributed processing,
-such as callbacks that print information or measure runtimes.
-To configure a callback to run only on the *master rank*, wrap it as a
-``tnt.keras.callbacks.Callback`` and set the constructor parameters as follows:
-
-.. code-block:: python
-
-  class MyCustomCallback(keras.callbacks.Callback):
-    ...
-
-  keras_callback = MyCustomCallback()
-  tnt_callback = tnt.keras.callbacks.Callback(keras_callback,
-                                              aggregate_logs = False,
-                                              run_on_all_ranks = False)
-
-Note that callbacks running on a single rank will only have access to local data corresponding
-to that rank. For instance, even though the models are identical on all ranks, a logging callback
-that displays metrics will only be aware of locally collected metrics, that is, metrics generated
-based on the micro-batches that the rank has processed.
+Tarantella callbacks are discussed in detail in the
+`<Tarantella docs https://tarantella.readthedocs.io/en/latest/quick_start.html#callbacks>`__.
