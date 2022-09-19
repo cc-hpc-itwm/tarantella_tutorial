@@ -5,10 +5,19 @@ Quick Start
 
 This section explains how to start using Tarantella to distributedly
 train an existing TensorFlow model.
-First, we will examine what changes have to be made to your code,
-before executing it on the command line with ``tarantella``.
-Finally, we will present the features Tarantella currently supports and
-what important points need to be taken into account when using the framework.
+
+.. note::
+
+  Tarantella is composed of two different components that need to be used
+  together for data parallel training across multiple devices.
+
+  1. Python module that can be imported in your code and provides access to the Tarantella API.
+
+  2. Runtime execution script `tarantella` to deploy the code in parallel.
+
+
+Now, we will examine what changes have to be made to your code,
+and how to execute it on the command line with ``tarantella``.
 
 Code example: LeNet-5 on MNIST
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
