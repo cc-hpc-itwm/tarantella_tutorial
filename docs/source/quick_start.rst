@@ -85,6 +85,8 @@ Executing your model with ``tarantella``
 
 Next, let's execute our model distributedly using ``tarantella`` on the command line.
 
+.. _tnt-exec-exports-label:
+
 .. caution::
 
   When working on **STYX**, make sure to export the following environment variables 
