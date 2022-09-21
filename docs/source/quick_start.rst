@@ -87,12 +87,13 @@ Next, let's execute our model distributedly using ``tarantella`` on the command 
 
 .. caution::
 
-  When working on **STYX**, make sure to export the following environment variable 
+  When working on **STYX**, make sure to export the following environment variables 
   before calling `tarantella`:
   
   .. code-block:: bash
 
-    export LD_LIBRARY_PATH=/opt/GPI/lib64:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=/opt/GPI/lib64:${LD_LIBRARY_PATH}
+    export LD_LIBRARY_PATH=${GASPICXX_INSTALLATION_PATH}:${LD_LIBRARY_PATH}
 
 The simplest way to run the model is by passing its Python script to ``tarantella``:
 
@@ -113,8 +114,7 @@ This will execute our model distributedly on a single node, using all the availa
 
     mkdir -p ${CONDA_ENV_PATH}/lib/nvvm/libdevice
     mv ${CONDA_ENV_PATH}/lib/libdevice.10.bc ${CONDA_ENV_PATH}/lib/nvvm/libdevice
-    export LD_LIBRARY_PATH=${CONDA_ENV_PATH}/lib:$LD_LIBRARY_PATH
-    export LD_LIBRARY_PATH=/opt/GPI/lib64:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=${CONDA_ENV_PATH}/lib:${LD_LIBRARY_PATH}
 
   Always add the following ``-x`` flags to the ``tarantella`` command in the examples bellow:
 
