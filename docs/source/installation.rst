@@ -29,7 +29,7 @@ Installing TensorFlow
 ^^^^^^^^^^^^^^^^^^^^^
 
 First you will need to install TensorFlow.
-Supported versions start at ``Tensorflow 2.4``, and they can be installed in a conda
+Supported versions range between ``Tensorflow 2.4 - 2.9``, and they can be installed in a conda
 environment using pip, as recommended on the
 `TensorFlow website <https://www.tensorflow.org/install>`_.
 
@@ -46,12 +46,12 @@ To get started, create and activate an environment for Tarantella:
   conda create -n tarantella
   conda activate tarantella
 
-Now, you can install the latest supported TensorFlow version with:
+Now, you can install TensorFlow with:
 
 .. code-block:: bash
 
   conda install -c nvidia python==3.9 cudatoolkit~=11.2 cudnn
-  pip install --upgrade tensorflow_gpu
+  pip install --upgrade tensorflow_gpu==2.9
   conda install pybind11 pytest networkx
 
 Tarantella requires at least Python ``3.7``. Make sure the selected version also matches
