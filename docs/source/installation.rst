@@ -57,6 +57,15 @@ Now, you can install the latest supported TensorFlow version with:
 Tarantella requires at least Python ``3.7``. Make sure the selected version also matches
 the `TensorFlow requirements <https://www.tensorflow.org/install>`_.
 
+.. caution::
+
+  If a new `conda` environment is created, or Tensorflow is reinstalled/updated, please
+  repeat all the steps concerning the 
+  :ref:`Tarantella library installation <tnt-install-label>`.
+  The Tarantella backend is compiled against the TensorFlow library, and thus it requires
+  exactly the same binary version at runtime.
+
+
 .. _gaspicxx-install-label:
 
 Installing GaspiCxx
@@ -75,10 +84,12 @@ To install GaspiCxx and PyGPI, first download the latest ``dev`` branch from the
 
   git clone https://github.com/cc-hpc-itwm/GaspiCxx.git
   cd GaspiCxx
-  git checkout -b dev
+  git checkout dev
 
 Compile and install the library as follows, making sure the previously created conda
 environment is activated:
+
+.. _tnt-install-label:
 
 .. code-block:: bash
 
