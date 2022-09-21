@@ -30,11 +30,12 @@ We can now simply run the ResNet-50 as follows:
 
     cd examples/image_classification
     tarantella --hostfile ./hostfile --devices-per-node 4 \
-    -- ./train_imagenet_main.py --model_arch=resnet50 --batch_size=256 --train_epochs=3 --val_freq=3
-                                --train_num_samples=2560 --val_num_samples=256 --synthetic_data
+    -- ./train_imagenet_main.py --model_arch=resnet50 --batch_size=256 --train_epochs=3 \
+                                --val_freq=3 --train_num_samples=2560 --val_num_samples=256 \
+                                --synthetic_data
 
 The above command will train a ResNet-50 models on the 8 devices available in parallel
-for ``3`` epochs, as suggested in [Goyal]_ to achieve convergence.
+for ``3`` epochs.
 The ``--val_freq`` parameter specifies the frequency of evaluations of the
 *validation dataset* performed in between training epochs.
 
@@ -47,8 +48,19 @@ to properly train the model.
 
 .. note::
 
-  On the STYX cluster, a pre-downloaded version of the ImageNet dataset can be found in ``/home/DATA/ImageNet``.
+  On the STYX cluster, a pre-downloaded version of the ImageNet dataset can be found in
+  ``/home/DATA/PUBLIC_DATA/ImageNet``.
+
+.. caution::
+
+  On **STYX**, don't forget to add the following ``-x`` flags to the ``tarantella`` command
+  to correctly detect the GPUs (and redo the steps from 
+  :ref:`here <tnt-exec-exports-label>` if in a new terminal)
+
+  .. code-block:: bash
   
+    tarantella -x XLA_FLAGS="--xla_gpu_cuda_data_dir=${CONDA_ENV_PATH}/lib" ...
+
 
 Implementation overview
 ^^^^^^^^^^^^^^^^^^^^^^^
